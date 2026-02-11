@@ -23,6 +23,9 @@ const SearchBox = ({ onSearch }) => {
   const [selectedState, setSelectedState] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
 
+  const [showStates, setShowStates] = useState(false);
+  const [showCities, setShowCities] = useState(false);
+
   /* FETCH STATES */
   useEffect(() => {
     fetch("https://eventdata.onrender.com/states")
@@ -44,14 +47,13 @@ const SearchBox = ({ onSearch }) => {
   /* FETCH EVENTS */
   const handleSearch = (e) => {
     e.preventDefault();
-
     if (!selectedState || !selectedCity) return;
 
     fetch(
       `https://eventdata.onrender.com/events?state=${selectedState}&city=${selectedCity}`
     )
       .then(res => res.json())
-      .then(data => onSearch(data, selectedCity))
+      .then(data => onSearch(data))
       .catch(console.error);
   };
 
@@ -59,39 +61,62 @@ const SearchBox = ({ onSearch }) => {
     <form onSubmit={handleSearch} className="search-category-container">
       <div className="form-row">
 
-        {/* ✅ STATE DIV MUST HAVE ID */}
-        <div id="state" className="dropdown state-dropdown">
+        {/* STATE DROPDOWN */}
+        <div
+          id="state"
+          className="dropdown state-dropdown"
+          onClick={() => setShowStates(!showStates)}
+        >
           <span className="search-icon"><SearchIcon /></span>
-          <select
-            value={selectedState}
-            onChange={(e) => {
-              setSelectedState(e.target.value);
-              setSelectedCity("");
-            }}
-          >
-            <option value="">Select State</option>
-            {states.map(s => (
-              <option key={s} value={s}>{s}</option>
-            ))}
-          </select>
+          <div>{selectedState || "Select State"}</div>
+
+          {showStates && (
+            <ul className="dropdown-list">
+              {states.map((state) => (
+                <li
+                  key={state}
+                  onClick={() => {
+                    setSelectedState(state);
+                    setSelectedCity("");
+                    setShowStates(false);
+                  }}
+                >
+                  {state}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
-        {/* ✅ CITY DIV MUST HAVE ID */}
-        <div id="city" className="dropdown city-dropdown">
+        {/* CITY DROPDOWN */}
+        <div
+          id="city"
+          className="dropdown city-dropdown"
+          onClick={() => {
+            if (selectedState) setShowCities(!showCities);
+          }}
+        >
           <span className="search-icon"><SearchIcon /></span>
-          <select
-            value={selectedCity}
-            onChange={(e) => setSelectedCity(e.target.value)}
-            disabled={!selectedState}
-          >
-            <option value="">Select City</option>
-            {cities.map(c => (
-              <option key={c} value={c}>{c}</option>
-            ))}
-          </select>
+          <div>{selectedCity || "Select City"}</div>
+
+          {showCities && (
+            <ul className="dropdown-list">
+              {cities.map((city) => (
+                <li
+                  key={city}
+                  onClick={() => {
+                    setSelectedCity(city);
+                    setShowCities(false);
+                  }}
+                >
+                  {city}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
-        {/* ✅ MUST BE type="submit" */}
+        {/* SEARCH BUTTON */}
         <button
           id="searchBtn"
           type="submit"
