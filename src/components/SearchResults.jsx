@@ -110,10 +110,10 @@ const SearchResults = ({ events = [], setEvents, city }) => {
 
       {/* ================= HEADER ================= */}
       <div className="sr-header">
-        <h2>
+        <h1>
           {events.length} events available in{" "}
           {events[0]?.city || selectedCity || city || ""}
-        </h2>
+        </h1>
       </div>
 
       {/* ================= CONTENT ================= */}
