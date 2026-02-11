@@ -42,26 +42,27 @@ const SearchBox = ({ onSearch }) => {
   }, [selectedState]);
 
   /* FETCH EVENTS */
-  const handleSearch = () => {
+  const handleSearch = (e) => {
+    e.preventDefault();
+
     if (!selectedState || !selectedCity) return;
 
     fetch(
       `https://eventdata.onrender.com/events?state=${selectedState}&city=${selectedCity}`
     )
       .then(res => res.json())
-      .then(data => onSearch(data))
+      .then(data => onSearch(data, selectedCity))
       .catch(console.error);
   };
 
   return (
-    <div className="search-category-container">
+    <form onSubmit={handleSearch} className="search-category-container">
       <div className="form-row">
 
-        {/* STATE */}
-        <div className="dropdown state-dropdown">
+        {/* ✅ STATE DIV MUST HAVE ID */}
+        <div id="state" className="dropdown state-dropdown">
           <span className="search-icon"><SearchIcon /></span>
           <select
-            id="state"   /* ✅ FIXED HERE */
             value={selectedState}
             onChange={(e) => {
               setSelectedState(e.target.value);
@@ -75,11 +76,10 @@ const SearchBox = ({ onSearch }) => {
           </select>
         </div>
 
-        {/* CITY */}
-        <div className="dropdown city-dropdown">
+        {/* ✅ CITY DIV MUST HAVE ID */}
+        <div id="city" className="dropdown city-dropdown">
           <span className="search-icon"><SearchIcon /></span>
           <select
-            id="city"   /* ✅ FIXED HERE */
             value={selectedCity}
             onChange={(e) => setSelectedCity(e.target.value)}
             disabled={!selectedState}
@@ -91,11 +91,11 @@ const SearchBox = ({ onSearch }) => {
           </select>
         </div>
 
+        {/* ✅ MUST BE type="submit" */}
         <button
           id="searchBtn"
-          type="button"   /* ✅ ADDED */
+          type="submit"
           className="search-btn"
-          onClick={handleSearch}
         >
           Search
         </button>
@@ -132,7 +132,8 @@ const SearchBox = ({ onSearch }) => {
           </div>
         </div>
       </div>
-    </div>
+    
+    </form> 
   );
 };
 
