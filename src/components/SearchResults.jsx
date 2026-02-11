@@ -1,0 +1,371 @@
+// const SearchResults = ({ events, city }) => {
+//   return (
+//     <section className="sr-outer">
+
+//       {/* ===== SEARCH BAR GRADIENT ===== */}
+//       <div className="sr-search-gradient">
+//         <div className="sr-search-bar">
+
+//           <div className="sr-dropdowns">
+//             <select>
+//               <option>Select State</option>
+//             </select>
+
+//             <select>
+//               <option>{city || "Select City"}</option>
+//             </select>
+//           </div>
+
+//           <button className="sr-search-btn">
+//             Search
+//           </button>
+
+//         </div>
+//       </div>
+
+//       {/* ===== RESULTS CONTAINER ===== */}
+//       <div className="sr-results">
+
+//         {/* COUNT */}
+//         <div className="sr-count">
+//           {events.length} events available in {city}
+//         </div>
+
+//         {/* INFO ROW */}
+//         <div className="sr-info">
+//           <img src="/919fdc7dc26e118a2e7fa52cf9fc1148eba876f8.png" alt="tick" />
+//           <span>
+//             Book tickets with minimum wait-time & verified event details
+//           </span>
+//         </div>
+
+//         {/* EVENT LIST */}
+//         <div className="sr-list">
+//           {events.map((event, index) => (
+//             <div key={index} className="sr-card">
+
+//               {/* LEFT IMAGE */}
+//               <img
+//                 src={event.image || "/38a6385be53237721c5df9c8e3f826b3cf565d76.png"}
+//                 alt={event.name}
+//                 className="sr-image"
+//               />
+
+//               {/* CENTER CONTENT */}
+//               <div className="sr-content">
+//                 <h3>{event.eventName}</h3>
+
+//                 <p className="sr-location">
+//                   {event.city}, {event.state}
+//                 </p>
+
+//                 <p className="sr-address">
+//                   {event.address}
+//                 </p>
+
+//                 <div className="sr-price">
+//                   FREE <span>₹500 Registration Fee</span>
+//                 </div>
+
+//                 <div className="sr-divider"></div>
+//               </div>
+
+//               {/* RIGHT SIDE */}
+//               <div className="sr-right">
+//                 <p className="sr-available">Available Today</p>
+//                 <button className="sr-calendar-btn">
+//                   Booking Calendar
+//                 </button>
+//               </div>
+
+//             </div>
+//           ))}
+//         </div>
+
+//       </div>
+
+//     </section>
+//   );
+// };
+
+// export default SearchResults;
+
+
+
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+/* ---------- SVG SEARCH ICON ---------- */
+const SearchIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+    <path
+      d="M21 21L16.65 16.65M11 18
+      C7.13 18 4 14.87 4 11
+      C4 7.13 7.13 4 11 4
+      C14.87 4 18 7.13 18 11
+      C18 14.87 14.87 18 11 18Z"
+      stroke="#9AA3B2"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+const SearchResults = ({ events, setEvents, city }) => {
+  const navigate = useNavigate();
+
+  const [states, setStates] = useState([]);
+  const [cities, setCities] = useState([]);
+  const [state, setState] = useState("");
+  const [selectedCity, setSelectedCity] = useState("");
+
+  const [openCalendarIndex, setOpenCalendarIndex] = useState(null);
+  const [selectedDate, setSelectedDate] = useState("Today");
+  const [selectedTime, setSelectedTime] = useState(null);
+
+  /* FETCH STATES */
+  useEffect(() => {
+    fetch("https://eventdata.onrender.com/states")
+      .then(res => res.json())
+      .then(data => setStates(data))
+      .catch(console.error);
+  }, []);
+
+  /* FETCH CITIES */
+  useEffect(() => {
+    if (!state) return;
+
+    fetch(`https://eventdata.onrender.com/cities/${state}`)
+      .then(res => res.json())
+      .then(data => setCities(data))
+      .catch(console.error);
+  }, [state]);
+
+  /* FETCH EVENTS */
+  const handleSearch = () => {
+    if (!state || !selectedCity) return;
+
+    fetch(
+      `https://eventdata.onrender.com/events?state=${state}&city=${selectedCity}`
+    )
+      .then(res => res.json())
+      .then(data => {
+        const result = Array.isArray(data) ? data : data.events || [];
+        setEvents(result);
+        setOpenCalendarIndex(null);
+        setSelectedDate("Today");
+        setSelectedTime(null);
+      })
+      .catch(console.error);
+  };
+
+  return (
+    <div className="sr-page">
+
+      {/* ================= SEARCH BAR ================= */}
+      <div className="sr-search-wrapper">
+        <div className="sr-search-bar">
+
+          <div className="dropdown">
+            <span className="search-icon"><SearchIcon /></span>
+            <select
+              value={state}
+              onChange={(e) => {
+                setState(e.target.value);
+                setSelectedCity("");
+              }}
+            >
+              <option value="">Select State</option>
+              {states.map(s => (
+                <option key={s} value={s}>{s}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="dropdown">
+            <span className="search-icon"><SearchIcon /></span>
+            <select
+              value={selectedCity}
+              onChange={(e) => setSelectedCity(e.target.value)}
+              disabled={!state}
+            >
+              <option value="">Select City</option>
+              {cities.map(c => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+            </select>
+          </div>
+
+          <button onClick={handleSearch}>Search</button>
+        </div>
+      </div>
+
+      {/* ================= HEADER ================= */}
+      <div className="sr-header">
+        <h2>
+          {events.length} events available in{" "}
+          {events[0]?.city || selectedCity || city || ""}
+        </h2>
+      </div>
+
+      {/* ================= CONTENT ================= */}
+      <div className="sr-content">
+
+        {/* LEFT */}
+        <div className="sr-left">
+          {events.map((event, index) => (
+            <div key={index} className="event-card">
+
+              {/* EVENT ROW */}
+              <div className="event-row">
+                <img
+                  src="/38a6385be53237721c5df9c8e3f826b3cf565d76.png"
+                  alt="event"
+                  className="event-icon"
+                />
+
+                <div className="event-details">
+                  <h3>{event.eventName}</h3>
+                  <p>{event.city}, {event.state}</p>
+                  <p>{event.address}</p>
+
+                  <div className="event-price">
+                    FREE <span>₹500 Registration fee</span>
+                  </div>
+
+                  <div className="event-rating">
+                    👍 {event.rating}
+                  </div>
+                </div>
+
+                <div className="event-cta">
+                  <span className="available">Available Today</span>
+                  <button
+                    onClick={() => {
+                      setOpenCalendarIndex(
+                        openCalendarIndex === index ? null : index
+                      );
+                      setSelectedTime(null);
+                    }}
+                  >
+                    {openCalendarIndex === index
+                      ? "Hide Booking Calendar"
+                      : "Book FREE Event"}
+                  </button>
+                </div>
+              </div>
+
+              {/* BOOKING CALENDAR */}
+              {openCalendarIndex === index && (
+                <div className="booking-calendar">
+
+                  {/* DATE TABS */}
+                  <div className="calendar-tabs">
+                    {["Today", "Tomorrow", "Sat, 18 Jan"].map(date => (
+                      <span
+                        key={date}
+                        className={selectedDate === date ? "active" : ""}
+                        onClick={() => {
+                          setSelectedDate(date);
+                          setSelectedTime(null);
+                        }}
+                      >
+                        {date}
+                        <br />
+                        10 Slots Available
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* TIME SLOTS */}
+                  <div className="calendar-slots">
+
+                    <div>
+                      <strong>Morning</strong>
+                      <button
+                        className={selectedTime === "11:30 AM" ? "active" : ""}
+                        onClick={() => setSelectedTime("11:30 AM")}
+                      >
+                        11:30 AM
+                      </button>
+                    </div>
+
+                    <div>
+                      <strong>Afternoon</strong>
+                      {["12:00 PM","12:30 PM","01:30 PM","02:00 PM","02:30 PM"].map(t => (
+                        <button
+                          key={t}
+                          className={selectedTime === t ? "active" : ""}
+                          onClick={() => setSelectedTime(t)}
+                        >
+                          {t}
+                        </button>
+                      ))}
+                    </div>
+
+                    <div>
+                      <strong>Evening</strong>
+                      {["06:00 PM","06:30 PM","07:00 PM","07:30 PM"].map(t => (
+                        <button
+                          key={t}
+                          className={selectedTime === t ? "active" : ""}
+                          onClick={() => setSelectedTime(t)}
+                        >
+                          {t}
+                        </button>
+                      ))}
+                    </div>
+
+                  </div>
+
+                  {/* CONFIRM BUTTON */}
+                  {selectedTime && (
+                    <div className="confirm-booking">
+<button
+  onClick={() => {
+    const newBooking = {
+      id: Date.now(),
+      event,
+      date: selectedDate,
+      time: selectedTime
+    };
+
+    const existing =
+      JSON.parse(sessionStorage.getItem("bookings")) || [];
+
+    sessionStorage.setItem(
+      "bookings",
+      JSON.stringify([...existing, newBooking])
+    );
+
+    navigate("/booking");
+  }}
+>
+  Confirm Booking
+</button>
+
+                    </div>
+                  )}
+
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* RIGHT */}
+        <div className="sr-right">
+          <img
+            src="/b75997e681d0c46ef7dc1a6e5e0f26f3712c1a47 (1).png"
+            alt="ad"
+          />
+        </div>
+
+      </div>
+    </div>
+  );
+};
+
+export default SearchResults;
+
