@@ -332,9 +332,9 @@ const SearchResults = ({ events, setEvents, city }) => {
     };
 
     const existing =
-      JSON.parse(sessionStorage.getItem("bookings")) || [];
+      JSON.parse(localStorage.getItem("bookings")) || [];
 
-    sessionStorage.setItem(
+    localStorage.setItem(
       "bookings",
       JSON.stringify([...existing, newBooking])
     );

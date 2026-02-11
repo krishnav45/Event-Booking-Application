@@ -1,47 +1,47 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 export default function MyBookings() {
   const { state } = useLocation();
-  const navigate = useNavigate();
 
   const [bookings, setBookings] = useState([]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  /* LOAD STORED BOOKINGS */
-  useEffect(() => {
-    const stored = JSON.parse(sessionStorage.getItem("bookings") || "[]");
-    setBookings(stored);
-  }, []);
+  /* LOAD + ADD BOOKING SAFELY */
+ useEffect(() => {
+  const storedBookings =
+    JSON.parse(localStorage.getItem("bookings")) || [];
 
-  /* ADD NEW BOOKING */
-  useEffect(() => {
-    if (state) {
-      const newBooking = {
-        event: state.event,
-        date: state.date,
-        time: state.time,
-      };
+  // If coming with new booking data
+  if (state?.event) {
+    const newBooking = {
+      event: state.event,
+      date: state.date,
+      time: state.time,
+    };
 
-      const stored = JSON.parse(sessionStorage.getItem("bookings") || "[]");
-      const updated = [...stored, newBooking];
+    const updatedBookings = [...storedBookings, newBooking];
 
-      setBookings(updated);
-      sessionStorage.setItem("bookings", JSON.stringify(updated));
-    }
-    // eslint-disable-next-line
-  }, [state]);
+    localStorage.setItem("bookings", JSON.stringify(updatedBookings));
+    setBookings(updatedBookings);
 
-  /* DELETE */
+    // 🔥 Remove state so it doesn't add again on refresh
+    window.history.replaceState({}, document.title);
+  } else {
+    // Just load saved bookings
+    setBookings(storedBookings);
+  }
+}, []);
+
+
+  /* DELETE BOOKING */
   const handleDelete = (index) => {
     const updated = bookings.filter((_, i) => i !== index);
     setBookings(updated);
-    sessionStorage.setItem("bookings", JSON.stringify(updated));
+    localStorage.setItem("bookings", JSON.stringify(updated));
   };
 
   return (
     <div className="page-wrapper">
-
       {/* HEADER */}
       <div className="header-outer">
         <div className="header-bar">
@@ -66,9 +66,8 @@ export default function MyBookings() {
       <div className="body-outer">
         <div className="body-inner">
 
-          {/* LEFT COLUMN - BOOKINGS */}
+          {/* LEFT COLUMN */}
           <div className="left-column">
-
             {bookings.length === 0 ? (
               <h3 style={{ textAlign: "center" }}>
                 No bookings found
@@ -76,22 +75,20 @@ export default function MyBookings() {
             ) : (
               bookings.map((booking, index) => (
                 <div key={index} className="booking-card">
-
                   <div className="card-inner">
 
-                    {/* EVENT ICON */}
+                    {/* EVENT IMAGE */}
                     <img
                       src="/38a6385be53237721c5df9c8e3f826b3cf565d76 (1).png"
                       alt="event"
                       className="event-thumb"
                     />
 
-                    {/* EVENT DETAILS */}
+                    {/* EVENT INFO */}
                     <div className="event-info">
 
-                      {/* TOP ROW */}
                       <div className="top-row">
-                        <h3>{booking.event.eventName}</h3>
+                        <h3>{booking.event?.eventName}</h3>
 
                         <div className="badge-group">
                           <span className="time-badge">
@@ -104,11 +101,12 @@ export default function MyBookings() {
                       </div>
 
                       <p className="location">
-                        {booking.event.city}, {booking.event.state}
+                        {booking.event?.city},{" "}
+                        {booking.event?.state}
                       </p>
 
                       <p className="address">
-                        {booking.event.address}
+                        {booking.event?.address}
                       </p>
 
                       <div className="price-row">
@@ -125,7 +123,7 @@ export default function MyBookings() {
                           src="/365a3dae5113f61b3d65050c99d2363dc5780103 (1).png"
                           alt="rating"
                         />
-                        <span>{booking.event.rating}</span>
+                        <span>{booking.event?.rating}</span>
                       </div>
 
                       <div className="action-row">
@@ -139,14 +137,12 @@ export default function MyBookings() {
 
                     </div>
                   </div>
-
                 </div>
               ))
             )}
-
           </div>
 
-          {/* RIGHT COLUMN - SINGLE POSTER */}
+          {/* RIGHT COLUMN - POSTER */}
           <div className="right-column">
             <img
               src="/e75a7beabed2a5b0c0d9f7a8c6aa6caf1eea1338 (2).png"
@@ -157,7 +153,6 @@ export default function MyBookings() {
 
         </div>
       </div>
-
     </div>
   );
 }
