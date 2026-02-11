@@ -38,7 +38,7 @@ const SearchPageHeader = () => {
 
             <button
               className="my-booking-btn"
-              onClick={() => navigate("/booking")}
+              onClick={() => navigate("/my-bookings")}
             >
               My Bookings
             </button>
@@ -71,7 +71,7 @@ const SearchPageHeader = () => {
             className="my-booking-btn mobile-booking"
             onClick={() => {
               setMenuOpen(false);
-              navigate("/booking");
+              navigate("/my-bookings");
             }}
           >
             My Bookings

@@ -246,7 +246,7 @@ const SearchResults = ({ events = [], setEvents, city }) => {
       JSON.stringify([...existing, newBooking])
     );
 
-    navigate("/booking");
+    navigate("/my-bookings");
   }}
 >
   Confirm Booking
