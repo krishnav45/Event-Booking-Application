@@ -26,7 +26,7 @@ function App() {
         <Route path="/" element={<LandingPage />} />
 
         {/* BOOKING PAGE */}
-        <Route path="/booking" element={<BookingPage />} />
+        <Route path="/my-bookings" element={<BookingPage />} />
       </Routes>
     </BrowserRouter>
   );

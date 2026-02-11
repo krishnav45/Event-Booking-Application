@@ -32,7 +32,7 @@ const Hero = () => {
             <a href="#">Services</a>
             <button className="booking-btn"
             onClick={() => {
-              navigate("/booking");
+              navigate("/my-bookings");
             }}            
             >My Bookings</button>
           </div>
@@ -58,7 +58,7 @@ const Hero = () => {
             <a href="#">Services</a>
             <button className="booking-btn"
             onClick={() => {
-              navigate("/booking");
+              navigate("/my-bookings");
             }}
             >My Bookings</button>
           </div>

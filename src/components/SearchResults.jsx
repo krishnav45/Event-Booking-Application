@@ -1,96 +1,3 @@
-// const SearchResults = ({ events, city }) => {
-//   return (
-//     <section className="sr-outer">
-
-//       {/* ===== SEARCH BAR GRADIENT ===== */}
-//       <div className="sr-search-gradient">
-//         <div className="sr-search-bar">
-
-//           <div className="sr-dropdowns">
-//             <select>
-//               <option>Select State</option>
-//             </select>
-
-//             <select>
-//               <option>{city || "Select City"}</option>
-//             </select>
-//           </div>
-
-//           <button className="sr-search-btn">
-//             Search
-//           </button>
-
-//         </div>
-//       </div>
-
-//       {/* ===== RESULTS CONTAINER ===== */}
-//       <div className="sr-results">
-
-//         {/* COUNT */}
-//         <div className="sr-count">
-//           {events.length} events available in {city}
-//         </div>
-
-//         {/* INFO ROW */}
-//         <div className="sr-info">
-//           <img src="/919fdc7dc26e118a2e7fa52cf9fc1148eba876f8.png" alt="tick" />
-//           <span>
-//             Book tickets with minimum wait-time & verified event details
-//           </span>
-//         </div>
-
-//         {/* EVENT LIST */}
-//         <div className="sr-list">
-//           {events.map((event, index) => (
-//             <div key={index} className="sr-card">
-
-//               {/* LEFT IMAGE */}
-//               <img
-//                 src={event.image || "/38a6385be53237721c5df9c8e3f826b3cf565d76.png"}
-//                 alt={event.name}
-//                 className="sr-image"
-//               />
-
-//               {/* CENTER CONTENT */}
-//               <div className="sr-content">
-//                 <h3>{event.eventName}</h3>
-
-//                 <p className="sr-location">
-//                   {event.city}, {event.state}
-//                 </p>
-
-//                 <p className="sr-address">
-//                   {event.address}
-//                 </p>
-
-//                 <div className="sr-price">
-//                   FREE <span>₹500 Registration Fee</span>
-//                 </div>
-
-//                 <div className="sr-divider"></div>
-//               </div>
-
-//               {/* RIGHT SIDE */}
-//               <div className="sr-right">
-//                 <p className="sr-available">Available Today</p>
-//                 <button className="sr-calendar-btn">
-//                   Booking Calendar
-//                 </button>
-//               </div>
-
-//             </div>
-//           ))}
-//         </div>
-
-//       </div>
-
-//     </section>
-//   );
-// };
-
-// export default SearchResults;
-
-
 
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -112,7 +19,7 @@ const SearchIcon = () => (
   </svg>
 );
 
-const SearchResults = ({ events, setEvents, city }) => {
+const SearchResults = ({ events = [], setEvents, city }) => {
   const navigate = useNavigate();
 
   const [states, setStates] = useState([]);

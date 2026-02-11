@@ -2,12 +2,7 @@ import { useEffect, useState } from "react";
 
 /* ---------- SVG SEARCH ICON ---------- */
 const SearchIcon = () => (
-  <svg
-    width="18"
-    height="18"
-    viewBox="0 0 24 24"
-    fill="none"
-  >
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
     <path
       d="M21 21L16.65 16.65M11 18
       C7.13 18 4 14.87 4 11
@@ -22,9 +17,7 @@ const SearchIcon = () => (
   </svg>
 );
 
-/* ---------- MAIN COMPONENT ---------- */
 const SearchBox = ({ onSearch }) => {
-  
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
   const [state, setState] = useState("");
@@ -35,7 +28,7 @@ const SearchBox = ({ onSearch }) => {
     fetch("https://eventdata.onrender.com/states")
       .then(res => res.json())
       .then(data => setStates(data))
-      .catch(err => console.error(err));
+      .catch(console.error);
   }, []);
 
   /* FETCH CITIES */
@@ -45,33 +38,27 @@ const SearchBox = ({ onSearch }) => {
     fetch(`https://eventdata.onrender.com/cities/${state}`)
       .then(res => res.json())
       .then(data => setCities(data))
-      .catch(err => console.error(err));
+      .catch(console.error);
   }, [state]);
 
   /* FETCH EVENTS */
-const handleSearch = () => {
-  if (!state || !city) return;
+  const handleSearch = () => {
+    if (!state || !city) return;
 
-  fetch(`https://eventdata.onrender.com/events?state=${state}&city=${city}`)
-    .then(res => res.json())
-    .then(data => {
-      onSearch(data); // 🔥 SEND DATA TO APP
-    })
-    .catch(err => console.error(err));
-};
-
+    fetch(`https://eventdata.onrender.com/events?state=${state}&city=${city}`)
+      .then(res => res.json())
+      .then(data => onSearch(data))
+      .catch(console.error);
+  };
 
   return (
     <div className="search-category-container">
 
-      {/* ================= FORM ================= */}
       <div className="form-row">
 
         {/* STATE */}
-        <div className="dropdown state-dropdown">
-          <span className="search-icon">
-            <SearchIcon />
-          </span>
+        <div id="state" className="dropdown state-dropdown">
+          <span className="search-icon"><SearchIcon /></span>
           <select
             value={state}
             onChange={(e) => {
@@ -80,33 +67,30 @@ const handleSearch = () => {
             }}
           >
             <option value="">Select State</option>
-            {states.map((s) => (
+            {states.map(s => (
               <option key={s} value={s}>{s}</option>
             ))}
           </select>
         </div>
 
         {/* CITY */}
-        <div className="dropdown city-dropdown">
-          <span className="search-icon">
-            <SearchIcon />
-          </span>            
+        <div id="city" className="dropdown city-dropdown">
+          <span className="search-icon"><SearchIcon /></span>
           <select
             value={city}
             onChange={(e) => setCity(e.target.value)}
             disabled={!state}
           >
             <option value="">Select City</option>
-            {cities.map((c) => (
+            {cities.map(c => (
               <option key={c} value={c}>{c}</option>
             ))}
           </select>
         </div>
 
-        <button 
-          className="search-btn"
+        <button
           id="searchBtn"
-          type="submit"
+          className="search-btn"
           onClick={handleSearch}
         >
           Search
