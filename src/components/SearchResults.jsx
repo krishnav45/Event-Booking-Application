@@ -169,7 +169,7 @@ const SearchResults = ({ events = [], setEvents, city }) => {
 
                   {/* DATE TABS */}
                   <div className="calendar-tabs">
-                    {["Today", "Tomorrow", "Sat, 18 Jan"].map(date => (
+                    {[<p className="download-subtext">Today</p>, "Tomorrow", "Sat, 18 Jan"].map(date => (
                       <span
                         key={date}
                         className={selectedDate === date ? "active" : ""}
