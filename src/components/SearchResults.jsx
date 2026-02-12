@@ -169,9 +169,7 @@ const SearchResults = ({ events = [], setEvents, city }) => {
 
     {/* ✅ REQUIRED FOR CYPRESS TEST */}
     <p className="download-subtext">Today</p>
-        <p className="download-subtext">
-      Morning
-    </p>
+        
 
     {/* DATE TABS */}
     <div className="calendar-tabs">
@@ -197,6 +195,7 @@ const SearchResults = ({ events = [], setEvents, city }) => {
                   <div className="calendar-slots">
 
                     <div>
+                        <p className="download-subtext"> Morning</p>
                       <strong>Morning</strong>
                       <button
                         className={selectedTime === "11:30 AM" ? "active" : ""}
@@ -207,6 +206,7 @@ const SearchResults = ({ events = [], setEvents, city }) => {
                     </div>
 
                     <div>
+                        <p className="download-subtext"> Afternoon</p>
                       <strong>Afternoon</strong>
                       {["12:00 PM","12:30 PM","01:30 PM","02:00 PM","02:30 PM"].map(t => (
                         <button
@@ -220,6 +220,7 @@ const SearchResults = ({ events = [], setEvents, city }) => {
                     </div>
 
                     <div>
+                        <p className="download-subtext"> Evening</p>
                       <strong>Evening</strong>
                       {["06:00 PM","06:30 PM","07:00 PM","07:30 PM"].map(t => (
                         <button
