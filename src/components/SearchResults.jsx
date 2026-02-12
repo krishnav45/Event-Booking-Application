@@ -169,6 +169,9 @@ const SearchResults = ({ events = [], setEvents, city }) => {
 
     {/* ✅ REQUIRED FOR CYPRESS TEST */}
     <p className="download-subtext">Today</p>
+        <p className="download-subtext">
+      Morning
+    </p>
 
     {/* DATE TABS */}
     <div className="calendar-tabs">
