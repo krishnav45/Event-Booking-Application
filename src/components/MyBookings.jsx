@@ -88,7 +88,7 @@ export default function MyBookings() {
                     <div className="event-info">
 
                       <div className="top-row">
-                        <h3>{booking.event?.eventName}</h3>
+                        <h3>{booking.event?.eventName || booking.eventName}</h3>
 
                         <div className="badge-group">
                           <span className="time-badge">
