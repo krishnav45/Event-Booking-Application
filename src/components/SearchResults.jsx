@@ -147,7 +147,8 @@ const SearchResults = ({ events = [], setEvents, city }) => {
                 </div>
 
                 <div className="event-cta">
-                  <span className="available">Available Today</span>
+                  <span className="available"     style={{color: "green",fontWeight: "bold",display: "block",marginBottom: "8px"
+    }}>Available Today</span>
                   <button
                     onClick={() => {
                       setOpenCalendarIndex(
@@ -167,8 +168,7 @@ const SearchResults = ({ events = [], setEvents, city }) => {
 {openCalendarIndex === index && (
   <div className="booking-calendar">
 
-    {/* ✅ REQUIRED FOR CYPRESS TEST */}
-    <p className="download-subtext">Today</p>
+    
         
 
     {/* DATE TABS */}
@@ -194,44 +194,98 @@ const SearchResults = ({ events = [], setEvents, city }) => {
                   {/* TIME SLOTS */}
                   <div className="calendar-slots">
 
-                    <div>
-                        <p className="download-subtext"> Morning</p>
-                      <strong>Morning</strong>
-                      <button
-                        className={selectedTime === "11:30 AM" ? "active" : ""}
-                        onClick={() => setSelectedTime("11:30 AM")}
-                      >
-                        11:30 AM
-                      </button>
-                    </div>
+<div
+  style={{
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+    flexWrap: "wrap"
+  }}
+>
+  <p
+    className="download-subtext"
+    style={{
+      fontWeight: "bold",
+      margin: "0",
+      color: "black"
+    }}
+  >
+    Morning
+  </p>
 
-                    <div>
-                        <p className="download-subtext"> Afternoon</p>
-                      <strong>Afternoon</strong>
-                      {["12:00 PM","12:30 PM","01:30 PM","02:00 PM","02:30 PM"].map(t => (
-                        <button
-                          key={t}
-                          className={selectedTime === t ? "active" : ""}
-                          onClick={() => setSelectedTime(t)}
-                        >
-                          {t}
-                        </button>
-                      ))}
-                    </div>
+  {["12:00 PM","12:30 PM","01:30 PM","02:00 PM","02:30 PM"].map(t => (
+    <button
+      key={t}
+      className={selectedTime === t ? "active" : ""}
+      onClick={() => setSelectedTime(t)}
+    >
+      {t}
+    </button>
+  ))}
+</div>
 
-                    <div>
-                        <p className="download-subtext"> Evening</p>
-                      <strong>Evening</strong>
-                      {["06:00 PM","06:30 PM","07:00 PM","07:30 PM"].map(t => (
-                        <button
-                          key={t}
-                          className={selectedTime === t ? "active" : ""}
-                          onClick={() => setSelectedTime(t)}
-                        >
-                          {t}
-                        </button>
-                      ))}
-                    </div>
+
+                    <div
+  style={{
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+    flexWrap: "wrap"
+  }}
+>
+  <p
+    className="download-subtext"
+    style={{
+      fontWeight: "bold",
+      margin: "0",
+      color: "black"
+    }}
+  >
+    Afternoon
+  </p>
+
+  {["12:00 PM","12:30 PM","01:30 PM","02:00 PM","02:30 PM"].map(t => (
+    <button
+      key={t}
+      className={selectedTime === t ? "active" : ""}
+      onClick={() => setSelectedTime(t)}
+    >
+      {t}
+    </button>
+  ))}
+</div>
+
+
+                    <div
+  style={{
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+    flexWrap: "wrap"
+  }}
+>
+  <p
+    className="download-subtext"
+    style={{
+      fontWeight: "bold",
+      margin: "0",
+      color: "black"
+    }}
+  >
+    Evening
+  </p>
+
+  {["12:00 PM","12:30 PM","01:30 PM","02:00 PM","02:30 PM"].map(t => (
+    <button
+      key={t}
+      className={selectedTime === t ? "active" : ""}
+      onClick={() => setSelectedTime(t)}
+    >
+      {t}
+    </button>
+  ))}
+</div>
+
 
                   </div>
 

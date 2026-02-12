@@ -75,7 +75,8 @@ const SearchBox = ({ onSearch }) => {
               {states.map((state) => (
                 <li
                   key={state}
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     setSelectedState(state);
                     setSelectedCity("");
                     setShowStates(false);
@@ -104,7 +105,8 @@ const SearchBox = ({ onSearch }) => {
               {cities.map((city) => (
                 <li
                   key={city}
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     setSelectedCity(city);
                     setShowCities(false);
                   }}
