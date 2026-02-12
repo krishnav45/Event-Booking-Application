@@ -169,10 +169,11 @@ const SearchResults = ({ events = [], setEvents, city }) => {
 
                   {/* DATE TABS */}
                   <div className="calendar-tabs">
-                    {[<p className="download-subtext">Today</p>, "Tomorrow", "Sat, 18 Jan"].map(date => (
+                    {["Today", "Tomorrow", "Sat, 18 Jan"].map(date => (
                       <span
+                      type="button"
                         key={date}
-                        className={selectedDate === date ? "active" : ""}
+                        className={`date-tab ${selectedDate === date ? "active" : ""}`}
                         onClick={() => {
                           setSelectedDate(date);
                           setSelectedTime(null);
